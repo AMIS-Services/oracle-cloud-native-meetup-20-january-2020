@@ -36,48 +36,6 @@ function handleRequest(callback) {
     }
 }
 
-// gets the OCI user with the specified id
-function getUser(userId, callback) {
-    var options = {
-        host: configs.identityDomain,
-        path: "/20160918/users/" + encodeURIComponent(userId),
-    };
-    var request = https.request(options, handleRequest(callback));
-    //log("Go Sign and Send Request") 
-    signRequest(request);
-    request.end();
-};
-
-
-function getBuckets(callback) {
-    var options = {
-        host: configs.objectStorageAPIEndpoint,
-        path: "/n/" + encodeURIComponent(configs.namespaceName) + "/b?compartmentId=" + encodeURIComponent(configs.compartmentId),
-        
-        method: "GET",
-    };
-
-    var request = https.request(options, handleRequest(callback));
-    //log("Go Sign and Send Request")
-    signRequest(request);
-
-    request.end();
-};
-
-function getObjectsInBucket(bucketName, callback) {
-    var options = {
-        host: configs.objectStorageAPIEndpoint,
-        path: "/n/" + encodeURIComponent(configs.namespaceName) + "/b/" + encodeURIComponent(bucketName) + "/o",
-    };
-
-    var request = https.request(options, handleRequest(callback));
-    //log("Go Sign and Send Request")
-    signRequest(request);
-
-    request.end();
-};
-
-// gets the OCI user with the specified id
 function createFileObject(bucket, filename, contentsAsString, callback) {
     var options = {
         host: configs.objectStorageAPIEndpoint,
@@ -100,17 +58,7 @@ function createFileObject(bucket, filename, contentsAsString, callback) {
 
 
 function fileWriter(bucket, fileName, contents, nowDate = new Date()) {
-    const lg = log
-    // getUser(configs.authUserId, function (data) {
-    //     console.log(data);
-    // });
-    // getObjectsInBucket(bucket, function (data) {
-    //     console.log(data);
-    // });
-    // getBuckets( function (data) {
-    //     console.log(data);
-    // });
-     createFileObject(bucket, fileName, contents, function (data) {
+     createFileObject((bucket||configs.bucketName), fileName, contents, function (data) {
         log(data);
      });
     return { "Status": "OK" }
