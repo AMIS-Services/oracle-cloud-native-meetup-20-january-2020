@@ -100,14 +100,19 @@ function getMessages(streamId, cursor, callback) {
 function consumeMessages(streamId) {
     // first open a cursor for the stream - for all messages still available in the stream
     getCursor(streamId, function (data) {
+        console.log("Cursor on Stream received:"+JSON.stringify(data));
         // using the cursor, retrieve all available messages
         getMessages(streamId, data.value, function (data) {
             console.log("Messages Consumed from Stream:");
+            console.log("raw data "+JSON.stringify(data));
+            try {
             data.forEach((e) => {
                 let buff = new Buffer.from(e.value, 'base64');
                 let text = buff.toString('ascii');
                 log( text)
             })
+            } catch (e) {console.log(`Processing data failed with ${e}` )}
+            
         })
     });
     return { "Status": "OK" }
