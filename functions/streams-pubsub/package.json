@@ -1,0 +1,12 @@
+{
+	"name": "oci-streams-pubsub",
+	"version": "1.0.0",
+	"description": "Node application to listen to and talk to OCI Stream",
+	"main": "func.js",
+	"author": "",
+	"license": "Apache-2.0",
+	"dependencies": {
+		"http-signature": "^1.3.1",
+		"jssha": "^2.3.1"
+	}
+}
