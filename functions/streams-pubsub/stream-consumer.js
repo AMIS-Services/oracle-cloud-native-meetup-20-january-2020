@@ -5,6 +5,8 @@ const https = require('https');
 const configs = require('./oci-configuration').configs;
 const log = require('./logger').l
 
+const CURSOR_TYPE=  "TRIM_HORIZON"
+
 let privateKeyPath = configs.privateKeyPath
 if (privateKeyPath.indexOf("~/") === 0) {
     privateKeyPath = privateKeyPath.replace("~", os.homedir())
@@ -37,32 +39,6 @@ function handleRequest(callback) {
     }
 }
 
-function getStreams(callback) {
-    var options = {
-        host: configs.streamingAPIEndpoint,
-        path: "/20180418/streams?compartmentId=" + encodeURIComponent(configs.compartmentId) + "&limit=10&page=&sortBy=TIMECREATED&sortOrder=desc&lifecycleState=",
-        method: "GET"
-    };
-    var request = https.request(options, handleRequest(callback));
-    //log("Go Sign and Send Request") 
-    signRequest(request);
-    request.end();
-
-}
-function getStream(streamId, callback) {
-    var options = {
-        host: configs.streamingAPIEndpoint,
-        path: "/20180418/streams/ocid1.stream.oc1.iad.amaaaaaa6sde7caa4mjocclrqlxxi2dtdj7o5aia66zem23hd6f23muer47a",
-        method: "GET"
-    };
-    var request = https.request(options, handleRequest(callback));
-    //log("Go Sign and Send Request") 
-    signRequest(request);
-    request.end();
-
-}
-
-
 function getCursor(streamId, callback) {
     var options = {
         host: configs.streamingAPIEndpoint,
@@ -76,7 +52,7 @@ function getCursor(streamId, callback) {
     //log("Go Sign and Send Request") 
     const payload = {
         "partition": "0",
-        "type": "TRIM_HORIZON"
+        "type": CURSOR_TYPE
     }
     let body = JSON.stringify(payload)
     signRequest(request, body);
