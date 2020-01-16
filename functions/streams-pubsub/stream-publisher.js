@@ -16,8 +16,7 @@ function signRequest(request, body = "") {
         privateKey: privateKey,
         keyFingerprint: configs.keyFingerprint,
         tenancyId: configs.tenancyId,
-        userId: configs.authUserId,
-        "passphrase": configs.pass_phrase,
+        userId: configs.authUserId
     }, body);
 }
 // generates a function to handle the https.request response object
@@ -85,45 +84,11 @@ module.exports = {
     publish: pubMessages
 }
 
-// invoke on the command line with :
-// node fileWriter '{"bucket":"TOKEN","fileName":"secret2", "contents":{"File Contents":"Contents, Contents"}}'
-const { execSync } = require('child_process');
-
-function overrideNowBasedOnOS() {
-    Date.now = function () {
-        const osdate = execSync('date');
-        const da = Date.parse(osdate)
-        return da;
-    }
-
-}
-
-
 // invoke with
-// node stream-publisher '{"streamId":"ocid1.stream.oc1.iad.amaaaaaa6sde7caa4mjocclrqlxxi2dtdj7o5aia66zem23hd6f23muer47a"}'
-
-
-run = async function () {
-    // const osdate = execSync('date');
-    // const d = Date.parse(osdate)
-    // const nowDate = new Date(d)
-    // if (d - Date.now() > 10000) {
-    //     // in this case the mapping from system clock to Date() is corrupt somehow
-    //     overrideNowBasedOnOS()
-    // }
-    if (process.argv && process.argv[2]) {
-        log("input:" + process.argv[2])
-        const input = JSON.parse(process.argv[2])
-        log("input: " + JSON.stringify(input))
-        let response = pubMessages(input.streamId)
-        log("response: " + JSON.stringify(response))
-    }
-}
-
+// node stream-publisher 
 
 run2 = async function () {
-
-    const input = { "streamId": "ocid1.stream.oc1.iad.amaaaaaa6sde7caa4mjocclrqlxxi2dtdj7o5aia66zem23hd6f23muer47a" }
+    const input = { "streamId": process.env["streamId"] }
     log("input: " + JSON.stringify(input))
     let response = pubMessages(input.streamId)
     log("response: " + JSON.stringify(response))
