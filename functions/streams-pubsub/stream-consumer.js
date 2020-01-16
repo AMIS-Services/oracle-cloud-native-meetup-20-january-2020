@@ -5,7 +5,7 @@ const https = require('https');
 const configs = require('./oci-configuration').configs;
 const log = require('./logger').l
 
-const CURSOR_TYPE=  "TRIM_HORIZON"
+const CURSOR_TYPE=  "TRIM_HORIZON" // AFTER_OFFSET, AT_OFFSET, AT_TIME, LATEST, TRIM_HORIZON; note: only use LATEST and TRIM_HORIZON for now
 
 let privateKeyPath = configs.privateKeyPath
 if (privateKeyPath.indexOf("~/") === 0) {
