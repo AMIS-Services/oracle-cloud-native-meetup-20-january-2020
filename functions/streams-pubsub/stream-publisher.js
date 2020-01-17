@@ -46,25 +46,15 @@ function publishMessages(streamId, messages, callback) {
             'Content-Type': 'application/json',
         }
     };
-    const message = new Buffer('my personal message - to be encoded in order to be published').toString('base64');
     msg =
         {
             "messages":
-                [
-                    {
-                        "key": null,
-                        "value": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wZWQgb3ZlciB0aGUgbGF6eSBkb2cu"
-                    },
-                    {
-                        "key": "personal",
-                        "value": message
-                    },
-                    {
-                        "key": null,
-                        "value": "UGFjayBteSBib3ggd2l0aCBmaXZlIGRvemVuIGxpcXVvciBqdWdzLg=="
-                    }
-                ]
+                []
         };
+    for (let i = 0; i < messages.length; i++) {
+        msg.messages.push({ "key": "personal", "value": new Buffer(messages[i]).toString('base64') })
+        console.log("Message: " + messages[i])
+    }
     body = JSON.stringify(msg)
     var request = https.request(options, handleRequest(callback));
     signRequest(request, body);
@@ -72,8 +62,8 @@ function publishMessages(streamId, messages, callback) {
     request.end();
 };
 
-function pubMessages(streamId) {
-    publishMessages(streamId, {}, function (data) {
+function pubMessages(streamId, messages) {
+    publishMessages(streamId, messages, function (data) {
         console.log("Messages Published to Stream.");
         log(JSON.stringify(data))
     });
@@ -85,12 +75,13 @@ module.exports = {
 }
 
 // invoke with
-// node stream-publisher 
+// node stream-publisher 'My Messages - to be spread around!'
 
 run2 = async function () {
-    const input = { "streamId": process.env["streamId"] }
+
+    const input = { "streamId": process.env["streamId"], "messages": [process.argv[2]] }
     log("input: " + JSON.stringify(input))
-    let response = pubMessages(input.streamId)
+    let response = pubMessages(input.streamId, input.messages)
     log("response: " + JSON.stringify(response))
 }
 
