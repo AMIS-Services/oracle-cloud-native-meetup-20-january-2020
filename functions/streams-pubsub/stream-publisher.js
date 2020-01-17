@@ -35,7 +35,9 @@ function handleRequest(callback) {
         });
     }
 }
-
+function encodeString(txt) {
+    return new Buffer(txt).toString('base64')
+}
 
 function publishMessages(streamId, messages, callback) {
     var options = {
@@ -52,7 +54,7 @@ function publishMessages(streamId, messages, callback) {
                 []
         };
     for (let i = 0; i < messages.length; i++) {
-        msg.messages.push({ "key": "personal", "value": new Buffer(messages[i]).toString('base64') })
+        msg.messages.push({ "key": encodeString("personal"), "value": encodeString( messages[i]) })
         console.log("Message: " + messages[i])
     }
     body = JSON.stringify(msg)
