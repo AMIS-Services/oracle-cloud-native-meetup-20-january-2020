@@ -1,7 +1,8 @@
 const fdk=require('@fnproject/fdk');
 const fileWriter=require('./fileWriter')
 fdk.handle(function(input){
-  const x = fileWriter.fileWriter(input.bucketname, input.filename, JSON.stringify(input.contents))
+  const bucketName = process.env['bucketName']
+  const x = fileWriter.fileWriter(bucketName, input.filename, JSON.stringify(input.contents))
   return x
 })
 
