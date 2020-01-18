@@ -11,7 +11,7 @@ if (privateKeyPath.indexOf("~/") === 0) {
 }
 const privateKey = fs.readFileSync(privateKeyPath, 'ascii');
 
-function signRequest(request, body="") {
+function signRequest(request, body = "") {
     ociRequestor.sign(request, {
         privateKey: privateKey,
         keyFingerprint: configs.keyFingerprint,
@@ -31,7 +31,7 @@ function handleRequest(callback) {
         });
 
         response.on('end', function () {
-            callback(JSON.responseBody?parse(responseBody):{"no":"contents"});
+            callback(JSON.responseBody ? parse(responseBody) : { "no": "contents" });
         });
     }
 }
@@ -58,9 +58,9 @@ function createFileObject(bucket, filename, contentsAsString, callback) {
 
 
 function fileWriter(bucket, fileName, contents, nowDate = new Date()) {
-     createFileObject((bucket||configs.bucketName), fileName, contents, function (data) {
+    createFileObject(bucket, fileName, contents, function (data) {
         log(data);
-     });
+    });
     return { "Status": "OK" }
 }
 
@@ -92,8 +92,12 @@ run = async function () {
     }
     if (process.argv && process.argv[2]) {
         const input = JSON.parse(process.argv[2])
+        var bucketName = process.env['bucketName']
+        if (!bucketName) {
+            log('No BucketName is defined; set environment variable bucketName to appropriate value')
+        }
         log("input: " + JSON.stringify(input))
-        let response = fileWriter(input.bucket, input.fileName, JSON.stringify(input.contents))
+        let response = fileWriter(bucketName, input.fileName, JSON.stringify(input.contents))
         log("response: " + JSON.stringify(response))
     }
 }
