@@ -26,7 +26,7 @@ async function processRSS(rssURL, filename) {
     let endpoint = process.env['file_writer_endpoint'];
     const result = await rssToJson(rssURL);
     log(`RSS Result received, with ${result.items.length} items`, 'processRSS')
-
+    log(`Next: call to FileWriter at ${endpoint} to write file ${filename} in bucket ${bucketName}`, 'processRSS')
     // now the call to the file_writer_endpoint
     var options = {
         method: 'POST', uri: endpoint,
