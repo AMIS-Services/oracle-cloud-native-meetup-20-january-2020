@@ -22,6 +22,7 @@ function signRequest(request, body = "") {
 }
 // generates a function to handle the https.request response object
 function handleRequest(callback) {
+    
 
     return function (response) {
         var responseBody = "";
@@ -31,10 +32,12 @@ function handleRequest(callback) {
         });
 
         response.on('end', function () {
+            log(`Response Body ${JSON.responseBody} `,"callback function defined in handleRequest")
             callback(JSON.responseBody ? parse(responseBody) : { "no": "contents" });
         });
     }
 }
+
 
 function createFileObject(bucket, filename, contentsAsString, callback) {
     var options = {
@@ -55,12 +58,19 @@ function createFileObject(bucket, filename, contentsAsString, callback) {
     request.end();
 };
 
-
-
-function fileWriter(bucket, fileName, contents, nowDate = new Date()) {
-    createFileObject(bucket, fileName, contents, function (data) {
-        log(data);
+function wait (timeout) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, timeout);
     });
+  }
+
+async function fileWriter(bucket, fileName, contents, nowDate = new Date()) {
+    createFileObject(bucket, fileName, contents, function (data) {
+        log(`Data returned from OCI REST API Call ${JSON.stringify(data)}`,"fileWriter");
+    });
+    await wait(3000);
     return { "Status": "OK" }
 }
 
