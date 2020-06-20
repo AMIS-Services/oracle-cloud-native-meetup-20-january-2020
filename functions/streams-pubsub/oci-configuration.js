@@ -1,19 +1,29 @@
 const configs=
     {
-        namespaceName: 'idtw',
-        region: 'us-ashburn-1',
-        pass_phrase: "passphrase123#$",
-        authUserId: "ocid1.user.oc1..aanlxphn3tyvn6gmkemlmxtdq",
-        identityDomain: "identity.us-ashburn-1.oraclecloud.com",
-        compartmentId: 'ocid1.compartment.oc1..aaaaaaaatxffms36xhqc4hekuif6wjnoyq4ilq', //functions-compartment
-        tenancyId: "ocid1.tenancy.oc1..aaaaaaasonnihko2igwpjwwe2egmlf3gg6okq",
-        keyFingerprint: "33:5f:59:02:b:29:3c:2e:71:0a:62",
-        privateKeyPath: "./oci_api_key.pem",
-        coreServicesDomain: "iaas.us-ashburn-1.oraclecloud.com",
-        streamingAPIEndpoint: "streaming.us-ashburn-1.oci.oraclecloud.com" 
+        // this is where the JSON snippet goes - pasted from the command line result
     }
 
-module.exports = {
+ module.exports = {
     configs : configs
 };
 
+// note:
+
+// the content of the file after pasting in the JSON data should look like this:
+
+// const configs=
+//     {
+//         namespaceName: `${process.env["ns"]}`,
+//         region: `${process.env["REGION"]}`,
+//         compartmentId: `${process.env["compartmentId"]}`, //lab-compartment
+//         authUserId: `${process.env["USER_OCID"]}`,
+//         identityDomain: `identity.${process.env["REGION"]}.oraclecloud.com`,
+//         tenancyId: `${process.env["TENANCY_OCID"]}`,
+//         keyFingerprint: "YOUR_FINGERPRINT_FROM FILE ./oci_api_key.pem",
+//         privateKeyPath: "./oci_api_key.pem",
+//         coreServicesDomain: `iaas.${process.env["REGION"]}.oraclecloud.com`,
+//         bucketOCID: process.env['bucketOCID'],
+//         bucketName:process.env['bucketName'],
+//         objectStorageAPIEndpoint:`objectstorage.${process.env["REGION"]}.oraclecloud.com`,
+//         streamingAPIEndpoint: `streaming.${process.env["REGION"]}.oci.oraclecloud.com` 
+//     }

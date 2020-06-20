@@ -36,7 +36,7 @@ function handleRequest(callback) {
     }
 }
 function encodeString(txt) {
-    return new Buffer(txt).toString('base64')
+    return new Buffer(txt?txt:"(empty)").toString('base64')
 }
 
 function publishMessages(streamId, messages, callback) {
